@@ -1,12 +1,7 @@
-# index starts at position 0
 
-
-
-
-
-
-
-
+# this code was created by Jacob Thom on November 5, 2021
+# it is just an overview of what can be done with a 1D doubly linked list
+# indexing starts with position 0
 
 
 #First we will create a node, the valuetype that will serve as the building block for our doubly linked list
@@ -307,7 +302,6 @@ class int_doubly_linked_list:
 					self.element_count+=1
 				
 	#joins two sorted lists in order. they must be sorted BEFORE this function is called
-	#possible issue with assigning head
 	def join_sorted_lists_in_order(self, listB):
 		self.element_count+= listB.give_length()
 
