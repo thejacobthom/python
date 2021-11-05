@@ -3,7 +3,6 @@
 # it is just an overview of what can be done with a 1D doubly linked list
 # indexing starts with position 0
 
-
 #First we will create a node, the valuetype that will serve as the building block for our doubly linked list
 
 class Node:
