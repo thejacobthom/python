@@ -11,7 +11,7 @@ class Node:
 	#here we create an init function for inception of a node. This includes a previous pointer and a next pointer
 	def __init__(self, value):
 		self.value = value
-		self.prev = NoneP
+		self.prev = None
 		self.next = None
 		
 	#here we create a representation function for displaying the node if called upon
