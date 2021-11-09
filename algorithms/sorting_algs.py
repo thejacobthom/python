@@ -1,5 +1,18 @@
-import random
+# this code was created by Jacob Thom on November 8, 2021
+# at current it implements
+# merge sort (admittedly done in an un-pythonic fashion)
+# insertion sort
+# bubble sort
+# selection sort
 
+#with plans for
+# radix sort
+# heap sort
+# bucket sort
+# quicksort
+
+
+import random
 
 #first we need a function to get a randomized array of numbers of n size
 def generate_random_array(n):
@@ -111,9 +124,49 @@ def merge_sort(arr):
 
 	return end_arr
 
+def bubble_sort(arr):
+	lenA = len(arr)
+
+	#for all elements
+	for x in range(0, lenA):
+
+		#last elements are already in order, -1 to account for end of array
+		for i in range(0, lenA-x-1):
+
+			#if two elements out of order
+			if arr[i] > arr[i+1]:
+				#swap
+				temp = arr[i]
+				arr[i] = arr[i+1]
+				arr[i+1] = temp
+	return arr
+
+def selection_sort(arr):
+	lenA = len(arr)
+
+	#for all elements
+	for x in range(0, lenA):
+
+		min_val = arr[x]
+		min_index = x
+		#first elements are already in order, -1 to account for end of array
+		for i in range(x+1, lenA):
+			#if the element is less than the min
+			if arr[i] < min_val:
+				#save it 
+				min_val = arr[i]
+				min_index = i
+		
+		#swap the resulting min with the first place in the sub array
+		temp = arr[x]
+		arr[x] = min_val
+		arr[min_index] = temp
+
+	return arr
+
 def main():
-	test = generate_random_array(100)
-	print(merge_sort(test))
+	test = generate_random_array(10)
+	print(selection_sort(test))
 
 if __name__ == "__main__":
 	main()
