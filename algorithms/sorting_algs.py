@@ -1,15 +1,18 @@
 # this code was created by Jacob Thom on November 8, 2021
-# at current it implements
-# merge sort (admittedly done in an un-pythonic fashion)
-# insertion sort
-# bubble sort
-# selection sort
+# at current it implements:
+# 	merge sort (admittedly done in an un-pythonic fashion)
+# 	insertion sort
+# 	bubble sort
+# 	selection sort
+# 	quicksort
+# 	radix sort
+#	bucket sort
 
 #with plans for
-# radix sort
+
 # heap sort
-# bucket sort
-# quicksort
+
+
 
 
 import random
@@ -40,6 +43,8 @@ def insertion_sort(arr):
 	#yay, all done
 	return arr
 
+
+#this function merges two arrays back together in a sorted fashion. it looks very unpythonic but just defines things easier
 def merge_sort_merge(arrA, arrB):
 	#to keep track of locations in each array
 	locationA = 0
@@ -92,6 +97,8 @@ def merge_sort_merge(arrA, arrB):
 
 	return end_arr
 
+
+#this function splits the array and then calls merge sort on each individual piece before merging them back together
 def merge_sort(arr):
 	i = len(arr)
 	#if not at base case
@@ -164,9 +171,135 @@ def selection_sort(arr):
 
 	return arr
 
+
+#this function finds the best pivot/centre for sorting an array and preforms the sorting before and after the pivot point
+def quick_sort_partition(arr, low, high):
+
+	pivot = arr[high] #rightmost element will be placed at the correct spot
+
+	index = low-1 # indicates lowest point of this partition which will be incremented to find the correct spot for the pivot
+
+	#for every index in current partition
+	for x in range(low, high):
+		if arr[x] < pivot: # if element is less than the pivot i.e. that the element is correctly in position relative to the pivot
+			index+=1 #move the soon to be pivot point forwards
+
+			# swap the element of the index and of the current element
+			temp = arr[index]
+			arr[index] = arr[x]
+			arr[x] = temp
+
+	#swap the position to the right of our index position with our pivot point
+	temp = arr[index+1]
+	arr[index+1] = arr[high]
+	arr[high] = temp
+
+	return arr, index+1 #return arr and centre/pivot point
+
+
+#this function splits the array and runs quicksort on both halves of the split array, each half of which has been semi-sorted by the partition function
+def quick_sort_sort(arr, low, high):
+	if low < high: # if not a single element
+		arr, centre = quick_sort_partition(arr, low, high) # find a good partition point
+
+		arr = quick_sort_sort(arr, low, centre - 1) # quicksort the first half
+		arr =  quick_sort_sort(arr, centre+1, high) #quicksort the second half
+
+	return arr # return arr
+
+def quick_sort(arr):
+	return quick_sort_sort(arr, 0, len(arr)-1)
+
+
+def radix_sort(arr):
+
+	max_digits = len(str(max(arr)))
+
+	#for every digit available i.e. 100 has 3 digits...
+	for digit in range (0, max_digits):
+
+		#create 10 buckets for each possible digit 0-9
+		buckets = [ [] for i in range(10)]
+
+		#for each value in the array
+		for x in arr:
+			#get the bucket number by extracting that single digit
+			to_be_bucket = (x// (10 ** digit)) % 10
+
+			#add that value at the *end* of its proper bucket (i.e in order)
+			buckets[to_be_bucket].append(x)
+
+		#empty the original list
+		del arr[:]
+
+		#add the buckets in order to the end of the array
+		for x in buckets:
+			arr.extend(x)
+
+	return arr
+
+
+# tradional bucket sort is awful for arrays that are capped at an even power of 10 (unless you want to modify the code for 100 buckets) which can be done
+# as seen below in a modified bucket sort
+def bucket_sort(arr):
+
+	fin_arr = []
+	#find the largest digit
+	largest_digit = len(str(max(arr))) -1
+
+	#create 10 buckets for each possible digit 0-9
+	buckets = [ [] for i in range(10)]
+
+	#for every value in the array
+	for x in arr:
+		#get the bucket number by extracting the largest possible digit
+		to_be_bucket = (x// (10 ** largest_digit)) % 10
+
+		#add that value to the correct bucket
+		buckets[to_be_bucket].append(x)
+
+	#for every bucket
+	for x in buckets:
+
+		#because bucket sort is cheap, just sort the bucket with some random method. i chose quicksort because its simple, quick, and reliable
+		fin_arr.extend(quick_sort(x))
+
+	return fin_arr
+
+#modified for more buckets (handles variable ranges better by defeating the pesky single multiple of 10)
+def modified_bucket_sort(arr):
+
+	fin_arr = []
+	#find the largest digit and subtract 2 because we want the last 2 digits
+	largest_digit = len(str(max(arr))) -3
+
+	#create 101 buckets for each possible digit 0-100
+	buckets = [ [] for i in range(101)]
+
+	#for every value in the array
+	for x in arr:
+		#get the bucket number by extracting the largest possible digit
+		to_be_bucket = x // (10**largest_digit)
+
+		#add that value to the correct bucket
+		buckets[to_be_bucket].append(x)
+
+	#for every bucket
+	for x in buckets:
+
+		#because bucket sort is cheap, just sort the bucket with some random method. i chose quicksort because its simple, quick, and reliable
+		fin_arr.extend(quick_sort(x))
+
+	return fin_arr
+
+
 def main():
-	test = generate_random_array(10)
-	print(selection_sort(test))
+	test = generate_random_array(1000)
+	#print(test)
+
+	print(bucket_sort(test))
+
+
 
 if __name__ == "__main__":
 	main()
