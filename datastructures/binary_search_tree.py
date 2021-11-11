@@ -166,59 +166,72 @@ class BST:
 					if current_node == self.root and current_node.childL == None and current_node.childR == None:
 						self.root = None
 					else:
-						#if both children exist
-						if current_node.childL != None and current_node.childR != None:					
-							
-							#find the leftmost node of the right child
-							#save the current working parent (default is just the right node)
-							new_parent = current_node.childR
 
-							new_parent_previous = None
-							#keep going left until cannot go left any longer
-							while new_parent.childL != None:
-								#save the parent
-								new_parent_previous = new_parent
-								#advance the new parent down the tree
-								new_parent = new_parent.childL
+						#if any children exist..
+						if current_node.childL != None or current_node.childR != None:	
+
+							#if both children exist
+							if current_node.childL != None and current_node.childR != None:					
+								
+								#find the leftmost node of the right child
+								#save the current working parent (default is just the right node)
+								new_parent = current_node.childR
+
+								new_parent_previous = None
+								#keep going left until cannot go left any longer
+								while new_parent.childL != None:
+									#save the parent
+									new_parent_previous = new_parent
+									#advance the new parent down the tree
+									new_parent = new_parent.childL
 
 
-							#adjust the pointer for the parent and set new pointers for the new node
-							if new_parent_previous != None:
-								new_parent_previous.childL = new_parent.childR 
+								#adjust the pointer for the parent and set new pointers for the new node
+								if new_parent_previous != None:
+									new_parent_previous.childL = new_parent.childR 
 
-								new_parent.childL = current_node.childL
-								new_parent.childR = current_node.childR
+									new_parent.childL = current_node.childL
+									new_parent.childR = current_node.childR
 
-							else:
-								#if no previous parent just shift the left child up
-								new_parent.childL = current_node.childL
+								else:
+									#if no previous parent just shift the left child up
+									new_parent.childL = current_node.childL
 
-							
-						#else if only has left children
-						elif current_node.childL != None:
+								
+							#else if only has left children
+							elif current_node.childL != None:
 
-							#assign new parent, no reassignment need for its pointers, only its parent which is handled below
-							new_parent = current_node.childL
+								#assign new parent, no reassignment need for its pointers, only its parent which is handled below
+								new_parent = current_node.childL
 
-						elif current_node.childR != None:
+							#else if only has right children
+							elif current_node.childR != None:
 
-							new_parent = current_node.childR
+								new_parent = current_node.childR
 
+							#if had a previous node
+							if previous_node != None:
+								if last_direction_left == True:
+									#set the left pointer to the new parentb
+									previous_node.childL = new_parent
+								else:
+									#set the right pointer to the new parent
+									previous_node.childR = new_parent
+
+							#else must be the root
+							else: 
+								self.root = new_parent
+
+						#no children
 						else:
-							print("fuck")
-
-						#if had a previous node
-						if previous_node != None:
 							if last_direction_left == True:
-								#set the left pointer to the new parentb
-								previous_node.childL = new_parent
+								#set the left pointer to None
+								previous_node.childL = None
 							else:
-								#set the right pointer to the new parent
-								previous_node.childR = new_parent
+								#set the right pointer to None
+								previous_node.childR = None
 
-						#else must be the root
-						else: 
-							self.root = new_parent
+
 
 				#else we're still searching
 				elif target_value < current_node.value:
@@ -240,6 +253,78 @@ class BST:
 					#change direction keeper
 					last_direction_left = False
 
+	#returns an arrary going (root, left branch, right branch)
+	def traverse_preorder(self, cur_node = None, check = False):
+		arr = []
+		#if node does not exist
+		if cur_node == None:
+
+			if check == False:
+				#this must be the first run, assign cur to root
+				cur_node = self.root
+				#set check to true as first run is completed
+				check = True
+			else: #we've hit the end of a branch
+				#return an empty array because python lets us extend by empty arrays
+				return arr
+
+		#extend the array by the current node
+		arr.extend([cur_node.value])
+		#recur and extend on left
+		arr.extend(self.traverse_preorder(cur_node.childL, check))
+		#recur and extend on right
+		arr.extend(self.traverse_preorder(cur_node.childR, check))
+
+		
+		return arr
+
+	#returns an arrary going (left branch, root, right branch)
+	def traverse_inorder(self, cur_node = None, check = False):
+		arr = []
+		#if node does not exist
+		if cur_node == None:
+
+			if check == False:
+				#this must be the first run, assign cur to root
+				cur_node = self.root
+				#set check to true as first run is completed
+				check = True
+			else: #we've hit the end of a branch
+				#return an empty array because python lets us extend by empty arrays
+				return arr
+
+		#recur and extend on left
+		arr.extend(self.traverse_inorder(cur_node.childL, check))
+		#extend the array by the current node
+		arr.extend([cur_node.value])
+		#recur and extend on right
+		arr.extend(self.traverse_inorder(cur_node.childR, check))
+
+		return arr
+
+	#returns an arrary going (left branch, right branch, root)
+	def traverse_postorder(self, cur_node = None, check = False):
+		arr = []
+		#if node does not exist
+		if cur_node == None:
+
+			if check == False:
+				#this must be the first run, assign cur to root
+				cur_node = self.root
+				#set check to true as first run is completed
+				check = True
+			else: #we've hit the end of a branch
+				#return an empty array because python lets us extend by empty arrays
+				return arr
+
+		#recur and extend on left
+		arr.extend(self.traverse_postorder(cur_node.childL, check))
+		#recur and extend on right
+		arr.extend(self.traverse_postorder(cur_node.childR, check))
+		#extend the array by the current node
+		arr.extend([cur_node.value])
+
+		return arr
 
 
 
@@ -272,25 +357,55 @@ def main():
 	test.insert(node12)
 
 
+
+	travtest1 = test.traverse_preorder()
+	travtest2 = test.traverse_inorder()
+	travtest3 = test.traverse_postorder()
+
+	print("-------- traversals -------")
+	print (travtest1)
+	print (travtest2)
+	print (travtest3)
+
+	print("-------- exists -------")
+	print(test.exists(91))
+	print(test.exists(85))
+	print(test.exists(12412))
+
+	print("-------- search -------")
+	print(test.search(75))
+	print(test.search(10))
+	print(test.search(61))
+
+	print("-------- deletions -------")
+	test.delete(8768) #value doesn't exist
+	test.delete(test.root.value)
+	test.delete(test.root.value)
+
+	test.print_tree()
+
+	test.delete(91)
+	test.delete(61)
 	test.delete(test.root.value)
 	test.delete(test.root.value)
 	test.delete(test.root.value)
-	test.delete(test.root.value)
-	test.delete(test.root.value)
-	test.delete(test.root.value)
-	test.delete(test.root.value)
-	test.delete(test.root.value)
+
+	test.print_tree()
+
 	test.delete(test.root.value)
 	test.delete(test.root.value)
 	test.delete(test.root.value)
 	test.delete(test.root.value)
 
-#BROKEN
+	print("-------- final root node -------")
+	test.print_tree()
+
+	test.delete(test.root.value)
+
 
 
 	test.print_tree()
 
-	print(str(test.exists(200)))
 
 
 if __name__ == "__main__":
