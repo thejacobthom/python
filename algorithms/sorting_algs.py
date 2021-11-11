@@ -294,10 +294,10 @@ def modified_bucket_sort(arr):
 
 
 def main():
-	test = generate_random_array(1000)
+	test = generate_random_array(200)
 	#print(test)
 
-	print(bucket_sort(test))
+	print(radix_sort(test))
 
 
 
