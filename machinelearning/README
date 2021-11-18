@@ -1,0 +1,8 @@
+- Trained Agent 4 has an error rate of less than 8% at this time Nov 18 2021
+- Trained Agent 5 has an error rate of less than 6% at this time Nov 18 2021
+- Trained Agent 6 has yet to be completed and has a current error rate of around 20%
+
+Current tasks include:
+- further hyperparameter tuning
+- agents 4 and 5 being reduced to 0% error rate (possible?)
+- agents for array sizes up until and including 10
