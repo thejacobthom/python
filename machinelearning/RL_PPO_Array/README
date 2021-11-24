@@ -1,0 +1,15 @@
+- Trained Agent 4 has an average of 2.433466 moves over 1 million runs on a 4x1 array at this time Nov 19, 2021
+- Trained Agent 5 has an average of 4.297511 moves over 1 million runs on a 5x1 array at this time Nov 22, 2021
+- Trained Agent 6 has an average of 6.584378 moves over 1 million runs on a 6x1 array at this time Nov 23, 2021
+- Attempts to train an agent on a 7x1 array have so far been fruitless, possibly calling for a switch to a supervised learning design
+
+Current/future tasks include:
+    -hyperparameter tuning
+
+
+Current observations:
+    -it should be possible to further reduce agents such that the average amount of moves is <array_size-1, this would just be insertion sort
+
+Current results of project are:
+    -0.0002 appears to be the optimal learning rate across the array sizes with successful agents
+    -a training steps estimate of (array_size-3)*5,000,000 seems to be the best way to train agents
